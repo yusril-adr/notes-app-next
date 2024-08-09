@@ -1,33 +1,34 @@
+import { ReactNode } from "react";
 import {
   useColorMode,
   useColorModeValue,
-  Button,
+  IconButton,
   type ButtonProps,
 } from "@chakra-ui/react";
 import { RiMoonLine, RiSunFill } from "react-icons/ri";
 
-interface ColorModeSwitcherProps {
+export interface ColorModeSwitcherProps {
   styles?: ButtonProps;
 }
 
-export default function ColorModeSwitcher({ styles }: ColorModeSwitcherProps) {
+export default function ColorModeSwitcher({
+  styles,
+}: ColorModeSwitcherProps): ReactNode {
   const { toggleColorMode } = useColorMode();
-  const text = useColorModeValue("Dark", "Light");
+  const text = useColorModeValue("dark", "light");
   const SwitchIcon = useColorModeValue(RiMoonLine, RiSunFill);
 
   return (
-    <Button
+    <IconButton
       size="md"
       fontSize="lg"
-      aria-label={`${text} Mode`}
-      title={`${text} Mode`}
+      aria-label={`Switch to ${text} mode`}
       variant="ghost"
       color="current"
+      marginLeft="2"
       onClick={toggleColorMode}
-      leftIcon={<SwitchIcon />}
+      icon={<SwitchIcon />}
       {...styles}
-    >
-      Switch to {text} Mode
-    </Button>
+    />
   );
 }

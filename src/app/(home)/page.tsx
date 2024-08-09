@@ -1,24 +1,12 @@
 "use client";
 
-import {
-  Flex,
-  Image,
-  Heading,
-  Text,
-  Code,
-  useColorModeValue,
-} from "@chakra-ui/react";
-import ColorModeSwitcher from "@components/ColorModeSwitcher";
+import { Flex, Image, Heading, Text, Code } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import React from "react";
 
 export default function Home(): React.ReactNode {
-  const bgColor = useColorModeValue("gray.300", "gray.600");
   return (
     <Flex
-      as="main"
-      bg={bgColor}
-      color="white"
       flexDir="column"
       justifyContent="center"
       alignItems="center"
@@ -42,7 +30,6 @@ export default function Home(): React.ReactNode {
       <Text>
         Edit in <Code colorScheme="teal">src/app/(home)/page.tsx</Code>
       </Text>
-      <ColorModeSwitcher styles={{ mt: 4 }} />
     </Flex>
   );
 }
