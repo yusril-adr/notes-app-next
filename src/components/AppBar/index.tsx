@@ -22,14 +22,24 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
-  List,
-  ListItem,
   ContainerProps,
+  GridItem,
+  Grid,
+  DrawerFooter,
 } from "@chakra-ui/react";
-import { RiArrowDownWideFill, RiMenuFill } from "react-icons/ri";
+import {
+  RiArrowDownWideFill,
+  RiHome4Fill,
+  RiHome4Line,
+  RiMenuFill,
+  RiStickyNoteFill,
+  RiStickyNoteLine,
+} from "react-icons/ri";
+import { Else, If, Then } from "react-if";
 
 // Components
 import ColorModeSwitcher from "../ColorModeSwitcher";
+import Tooltip from "../Tooltip";
 
 // Services
 
@@ -45,6 +55,8 @@ export default function AppBar({ styles }: AppBarProps): ReactNode {
   const bgColor = useColorModeValue("white", "gray.800");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const drawerBtnRef = useRef<HTMLButtonElement>(null);
+  const HomeIcon = useColorModeValue(RiHome4Line, RiHome4Fill);
+  const NotesIcon = useColorModeValue(RiStickyNoteLine, RiStickyNoteFill);
   const user: User = null;
 
   return (
@@ -62,18 +74,54 @@ export default function AppBar({ styles }: AppBarProps): ReactNode {
           Notes
         </Heading>
 
-        <Box display={{ base: "none", lg: "flex" }} alignItems="center">
-          {user && (
-            <>
-              <Avatar
-                name={user?.email}
-                src={`https://ui-avatars.com/api/?background=random&name=${user?.email}`}
-              />
+        <Box
+          display={{ base: "none", lg: "flex" }}
+          alignItems="center"
+          columnGap="1"
+        >
+          <Tooltip label="Home">
+            <IconButton
+              as={Link}
+              href="/"
+              size="md"
+              fontSize="lg"
+              aria-label="Home"
+              title="Home"
+              variant="ghost"
+              color="current"
+              icon={<HomeIcon />}
+            />
+          </Tooltip>
+
+          <Tooltip label="My Notes">
+            <IconButton
+              as={Link}
+              href="/notes"
+              size="md"
+              fontSize="lg"
+              aria-label="My Notes"
+              title="My Notes"
+              variant="ghost"
+              color="current"
+              icon={<NotesIcon />}
+            />
+          </Tooltip>
+
+          <ColorModeSwitcher />
+
+          <If condition={!!user}>
+            <Then>
               <Menu>
                 <MenuButton
                   as={Button}
+                  leftIcon={
+                    <Avatar
+                      name={user?.email}
+                      src={`https://ui-avatars.com/api/?background=random&name=${user?.email}`}
+                      size="sm"
+                    />
+                  }
                   rightIcon={<RiArrowDownWideFill />}
-                  ms={[1, 2]}
                   variant="ghost"
                 >
                   {user?.email}
@@ -84,10 +132,36 @@ export default function AppBar({ styles }: AppBarProps): ReactNode {
                   </MenuItem>
                 </MenuList>
               </Menu>
-            </>
-          )}
+            </Then>
 
-          <ColorModeSwitcher styles={{ ms: 2 }} />
+            <Else>
+              <Link href={`/login`}>
+                <Button
+                  colorScheme="teal"
+                  variant="ghost"
+                  size={{
+                    base: "xs",
+                    md: "sm",
+                  }}
+                >
+                  Log In
+                </Button>
+              </Link>
+
+              <Link href={`/register`}>
+                <Button
+                  colorScheme="teal"
+                  variant="solid"
+                  size={{
+                    base: "xs",
+                    md: "sm",
+                  }}
+                >
+                  Register
+                </Button>
+              </Link>
+            </Else>
+          </If>
         </Box>
 
         <IconButton
@@ -112,6 +186,7 @@ export default function AppBar({ styles }: AppBarProps): ReactNode {
           <DrawerOverlay />
           <DrawerContent>
             <DrawerCloseButton />
+
             <DrawerHeader
               display="flex"
               alignItems="center"
@@ -120,17 +195,78 @@ export default function AppBar({ styles }: AppBarProps): ReactNode {
               <Text>Menu</Text>
               <ColorModeSwitcher styles={{ me: 6 }} />
             </DrawerHeader>
+
             <DrawerBody>
-              <List spacing={3}>
-                {user && (
-                  <ListItem>
-                    <Button variant="ghost" as={Link} href="/logout">
+              <Grid templateColumns="repeat(2, 1fr)" gap="2" onClick={onClose}>
+                <GridItem>
+                  <Button
+                    as={Link}
+                    href="/"
+                    variant="outline"
+                    w="100%"
+                    leftIcon={<HomeIcon />}
+                  >
+                    Home
+                  </Button>
+                </GridItem>
+
+                <GridItem>
+                  <Button
+                    as={Link}
+                    href="/notes"
+                    variant="outline"
+                    w="100%"
+                    leftIcon={<NotesIcon />}
+                  >
+                    My Notes
+                  </Button>
+                </GridItem>
+              </Grid>
+            </DrawerBody>
+
+            <DrawerFooter>
+              <If condition={!!user}>
+                <Then>
+                  <Box w="100%" onClick={onClose}>
+                    <Button colorScheme="blue" variant="outline" w="100%">
                       Log Out
                     </Button>
-                  </ListItem>
-                )}
-              </List>
-            </DrawerBody>
+                  </Box>
+                </Then>
+                <Else>
+                  <Grid
+                    templateColumns="repeat(2, 1fr)"
+                    width="100%"
+                    gap="2"
+                    onClick={onClose}
+                  >
+                    <GridItem>
+                      <Button
+                        as={Link}
+                        href="/login"
+                        colorScheme="teal"
+                        variant="outline"
+                        w="100%"
+                      >
+                        Log In
+                      </Button>
+                    </GridItem>
+
+                    <GridItem>
+                      <Button
+                        as={Link}
+                        href="/register"
+                        colorScheme="teal"
+                        variant="solid"
+                        w="100%"
+                      >
+                        Register
+                      </Button>
+                    </GridItem>
+                  </Grid>
+                </Else>
+              </If>
+            </DrawerFooter>
           </DrawerContent>
         </Drawer>
       </Container>

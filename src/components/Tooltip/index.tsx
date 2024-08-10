@@ -13,7 +13,7 @@ const ToolTipRef = forwardRef<HTMLDivElement, BoxProps>(
 ToolTipRef.displayName = "ToolTipRef";
 
 export interface TooltipProps {
-  children: ReactNode[];
+  children: ReactNode[] | ReactNode;
   label: string;
 }
 

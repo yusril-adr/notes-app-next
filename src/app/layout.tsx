@@ -4,8 +4,9 @@ import { Container, SkipNavLink } from "@chakra-ui/react";
 
 import { Provider as ChakraProvider } from "@utils/libs/chakra-ui/providers";
 import favicon from "./favicon.ico";
-import AppBar from "@components/AppBar";
 import { CONFIG } from "@utils/contants/config";
+import AppBar from "@components/AppBar";
+import Footer from "@components/Footer";
 // import { Inter } from "next/font/google";
 
 // const inter = Inter({ subsets: ["latin"] });
@@ -33,6 +34,8 @@ export default function RootLayout({
           <Container as="main" maxW="8xl" minH={CONFIG.MIN_BODY_HEIGHT}>
             {children}
           </Container>
+
+          <Footer styles={{ my: "8" }} />
         </ChakraProvider>
       </body>
     </html>
