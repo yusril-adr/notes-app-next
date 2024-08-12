@@ -1,6 +1,14 @@
 "use client";
 
-import { Flex, Image, Heading, Text, Code } from "@chakra-ui/react";
+import {
+  Flex,
+  Image,
+  Heading,
+  Text,
+  Code,
+  SkipNavContent,
+} from "@chakra-ui/react";
+import { CONFIG } from "@utils/contants/config";
 import { motion } from "framer-motion";
 import React from "react";
 
@@ -10,8 +18,10 @@ export default function Home(): React.ReactNode {
       flexDir="column"
       justifyContent="center"
       alignItems="center"
-      minH="100vh"
+      minH={CONFIG.MIN_BODY_HEIGHT}
     >
+      <SkipNavContent />
+
       <motion.div
         animate={{
           scale: [1, 0.5, 0.5, 1, 1],

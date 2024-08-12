@@ -1,10 +1,11 @@
 "use client";
 
 import { ReactNode } from "react";
-import { Box, Flex, Heading } from "@chakra-ui/react";
+import { Box, Flex, Heading, SkipNavContent } from "@chakra-ui/react";
 import Lottie from "lottie-react";
 
 import notFoundLottie from "@utils/libs/lottie/404.json";
+import { CONFIG } from "@utils/contants/config";
 
 export default function NotFound(): ReactNode {
   return (
@@ -12,16 +13,20 @@ export default function NotFound(): ReactNode {
       flexDir="column"
       justifyContent="center"
       alignItems="center"
-      minH="100vh"
+      minH={CONFIG.MIN_BODY_HEIGHT}
     >
+      <SkipNavContent />
+
       <Box
+        as={Lottie}
         maxW={{
           base: "100%",
-          xl: "75%",
+          md: "760px",
+          "2xl": "75%",
         }}
-      >
-        <Lottie animationData={notFoundLottie} loop />
-      </Box>
+        animationData={notFoundLottie}
+        loop
+      />
       <Heading>Page not found</Heading>
     </Flex>
   );

@@ -48,10 +48,14 @@ type User = null | {
 };
 
 interface AppBarProps {
+  transparent?: boolean;
   styles: ContainerProps;
 }
 
-export default function AppBar({ styles }: AppBarProps): ReactNode {
+export default function AppBar({
+  transparent,
+  styles,
+}: AppBarProps): ReactNode {
   const bgColor = useColorModeValue("white", "gray.800");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const drawerBtnRef = useRef<HTMLButtonElement>(null);
@@ -60,7 +64,13 @@ export default function AppBar({ styles }: AppBarProps): ReactNode {
   const user: User = null;
 
   return (
-    <Box as="header" position="sticky" top="0" bg={bgColor} zIndex="999">
+    <Box
+      as="header"
+      position="sticky"
+      top="0"
+      bg={transparent ? "transparent" : bgColor}
+      zIndex="999"
+    >
       <Container
         fontSize="xl"
         display="flex"
