@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, ReactNode } from "react";
+import { useRef, FC } from "react";
 import { Link } from "@chakra-ui/next-js";
 import {
   useColorModeValue,
@@ -47,15 +47,12 @@ type User = null | {
   email?: string;
 };
 
-interface AppBarProps {
+export interface AppBarProps {
   transparent?: boolean;
   styles: ContainerProps;
 }
 
-export default function AppBar({
-  transparent,
-  styles,
-}: AppBarProps): ReactNode {
+const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
   const bgColor = useColorModeValue("white", "gray.800");
   const { isOpen, onOpen, onClose } = useDisclosure();
   const drawerBtnRef = useRef<HTMLButtonElement>(null);
@@ -282,4 +279,6 @@ export default function AppBar({
       </Container>
     </Box>
   );
-}
+};
+
+export default AppBar;

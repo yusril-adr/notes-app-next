@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { forwardRef, ReactNode } from "react";
+import { FC, forwardRef, ReactNode } from "react";
 import { Box, BoxProps, Tooltip as TooltipChakra } from "@chakra-ui/react";
 
 const ToolTipRef = forwardRef<HTMLDivElement, BoxProps>(
@@ -17,10 +17,12 @@ export interface TooltipProps {
   label: string;
 }
 
-export default function Tooltip({ children, label }: TooltipProps): ReactNode {
+const Tooltip: FC<TooltipProps> = ({ children, label }) => {
   return (
     <TooltipChakra label={label}>
       <ToolTipRef>{children}</ToolTipRef>
     </TooltipChakra>
   );
-}
+};
+
+export default Tooltip;
