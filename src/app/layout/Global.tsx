@@ -1,38 +1,37 @@
 "use client";
-import { ReactNode } from "react";
-import { Container, SkipNavLink } from "@chakra-ui/react";
 
-import { CONFIG } from "@utils/contants/config";
-import AppBar from "@components/AppBar";
-import Footer from "@components/Footer";
-import { usePathname } from "next/navigation";
-import { Else, If, Then, When } from "react-if";
+import { Children, FC, ReactNode, useMemo } from "react";
 
-export default function GlobalLayout({
-  children,
-}: {
+import Alert from "@components/Alert";
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { unsetAlert } from "@states/alertMessage";
+
+const GlobalLayout: FC<{
   children: ReactNode;
-}): ReactNode {
-  const pathname = usePathname();
+}> = ({ children }) => {
+  const dispatch = useAppDispatch();
+  const alertMessage = useAppSelector((state) => state.alertMessage.value);
+  const {
+    title,
+    message,
+    isLoading: alertLoading,
+  } = useMemo(() => alertMessage, [alertMessage]);
+
+  const handleAlertConfirm = () => {
+    dispatch(unsetAlert());
+  };
+
   return (
     <>
-      <SkipNavLink zIndex="9999">Skip to content</SkipNavLink>
-      <When condition={pathname !== "/login" && pathname !== "/register"}>
-        <AppBar styles={{ maxW: "8xl" }} />
-      </When>
-
-      <If condition={pathname !== "/login" && pathname !== "/register"}>
-        <Then>
-          <Container as="main" maxW="8xl" minH={CONFIG.MIN_BODY_HEIGHT}>
-            {children}
-          </Container>
-        </Then>
-        <Else>{children}</Else>
-      </If>
-
-      <When condition={pathname !== "/login" && pathname !== "/register"}>
-        <Footer styles={{ my: "8" }} />
-      </When>
+      {children}
+      <Alert
+        title={title}
+        message={message}
+        isLoading={alertLoading}
+        onConfirm={handleAlertConfirm}
+      />
     </>
   );
-}
+};
+
+export default GlobalLayout;

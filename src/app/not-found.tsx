@@ -5,7 +5,7 @@ import { Box, Flex, Heading, SkipNavContent } from "@chakra-ui/react";
 import Lottie from "lottie-react";
 
 import notFoundLottie from "@utils/libs/lottie/404.json";
-import { CONFIG } from "@utils/contants/config";
+import CONFIG from "@utils/contants/config";
 
 export default function NotFound(): ReactNode {
   return (

@@ -1,8 +1,8 @@
 import React from "react";
 import type { Metadata } from "next";
 
-import { Provider as ChakraProvider } from "@utils/libs/chakra-ui/providers";
 import favicon from "./favicon.ico";
+import ProviderLayout from "./layout/Provider";
 import GlobalLayout from "./layout/Global";
 // import { Inter } from "next/font/google";
 
@@ -24,9 +24,9 @@ export default function RootLayout({
         <link rel="shortcut icon" href={favicon.src} type="image/x-icon" />
       </head>
       <body>
-        <ChakraProvider>
+        <ProviderLayout>
           <GlobalLayout>{children}</GlobalLayout>
-        </ChakraProvider>
+        </ProviderLayout>
       </body>
     </html>
   );

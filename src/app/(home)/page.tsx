@@ -8,9 +8,9 @@ import {
   Code,
   SkipNavContent,
 } from "@chakra-ui/react";
-import { CONFIG } from "@utils/contants/config";
 import { motion } from "framer-motion";
 import React from "react";
+import CONFIG from "@utils/contants/config";
 
 export default function Home(): React.ReactNode {
   return (
