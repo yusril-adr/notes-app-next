@@ -1,6 +1,6 @@
-import { z, ZodType } from "zod";
+import { z } from "zod";
 
-const LoginSchema: ZodType = z
+const LoginSchema = z
   .object({
     identifier: z.string().min(1, { message: "Email/Username is required" }),
     password: z

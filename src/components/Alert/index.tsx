@@ -1,4 +1,11 @@
-import { FC, useEffect, useRef } from "react";
+import {
+  FC,
+  useEffect,
+  useRef,
+  createContext,
+  useState,
+  ReactNode,
+} from "react";
 // import PropTypes from "prop-types";
 import {
   useDisclosure,
@@ -12,22 +19,98 @@ import {
   Spinner,
   Text,
 } from "@chakra-ui/react";
+import { useAlert } from "@hooks/alert";
+import CONFIG from "@utils/contants/config";
+import APIError from "@errors/APIError";
 
-export interface AlertProps {
+export type AlertContextType = {
+  title?: string | null;
+  message?: string | null;
+  isLoading?: boolean;
+  showAlert: (title: string, message: string) => void;
+  showAlertMessage: (message: string) => void;
+  showAlertError: (payload: unknown) => void;
+  showLoading: () => void;
+  clearAlert: () => void;
+};
+
+export const AlertContext = createContext<AlertContextType | undefined>(
+  undefined,
+);
+
+export const AlertProvider: React.FC<{ children: ReactNode }> = ({
+  children,
+}) => {
+  const [title, setTitle] = useState<string | null>(null);
+  const [message, setMessage] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const showAlert = (title: string, message: string) => {
+    setTitle(title);
+    setMessage(message);
+    setIsLoading(false);
+  };
+
+  const showAlertMessage = (message: string) => {
+    setTitle(null);
+    setMessage(message);
+    setIsLoading(false);
+  };
+
+  const showAlertError = (payload: unknown) => {
+    let message: string = CONFIG.DEFAULT_ERROR_MESSAGE;
+
+    if (payload instanceof APIError) {
+      message = payload.message;
+    }
+
+    setTitle(null);
+    setMessage(message);
+    setIsLoading(false);
+  };
+
+  const showLoading = () => {
+    setTitle(null);
+    setMessage(null);
+    setIsLoading(true);
+  };
+
+  const clearAlert = () => {
+    setTitle(null);
+    setMessage(null);
+    setIsLoading(false);
+  };
+
+  return (
+    <AlertContext.Provider
+      value={{
+        title,
+        message,
+        isLoading,
+        showAlert,
+        showAlertMessage,
+        showAlertError,
+        showLoading,
+        clearAlert,
+      }}
+    >
+      {children}
+      <Alert />
+    </AlertContext.Provider>
+  );
+};
+
+export type AlertProps = {
   title?: string | null;
   message?: string | null;
   isLoading?: boolean;
   onConfirm?: () => void | null;
-}
+};
 
-const Alert: FC<AlertProps> = ({
-  title = "Notification",
-  message,
-  isLoading = false,
-  onConfirm = null,
-}) => {
+const Alert: FC = () => {
   const cancelRef = useRef(null);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { title, message, isLoading, clearAlert } = useAlert();
 
   useEffect(() => {
     if (message || isLoading) {
@@ -38,10 +121,8 @@ const Alert: FC<AlertProps> = ({
   }, [message, isLoading, onOpen, onClose]);
 
   const onCloseHandler = () => {
+    clearAlert();
     onClose();
-    if (onConfirm) {
-      onConfirm();
-    }
   };
 
   return (
@@ -57,7 +138,7 @@ const Alert: FC<AlertProps> = ({
             fontWeight="bold"
             {...(isLoading && { textAlign: "center" })}
           >
-            {isLoading ? "Loading..." : title}
+            {isLoading ? "Loading..." : title || "Notification"}
           </AlertDialogHeader>
 
           <AlertDialogBody
@@ -74,7 +155,7 @@ const Alert: FC<AlertProps> = ({
             {!isLoading && message && (
               <Button
                 ref={cancelRef}
-                colorScheme="blue"
+                colorScheme="teal"
                 ml={3}
                 onClick={onCloseHandler}
               >
@@ -87,18 +168,5 @@ const Alert: FC<AlertProps> = ({
     </AlertDialog>
   );
 };
-
-// Alert.propTypes = {
-//   /** The title of the modal header. */
-//   title: PropTypes.string,
-//   /** The message in the modal body. */
-//   message: PropTypes.string,
-//   /** if true, only showing spinner from chakra ui,
-//       Any title and message props are ignored.
-//   */
-//   isLoading: PropTypes.bool,
-//   /** Action when the CTA button is clicked.  */
-//   onConfirm: PropTypes.func,
-// };
 
 export default Alert;

@@ -6,7 +6,6 @@ import {
   CardBody,
   Grid,
   GridItem,
-  Link as ChakraLink,
   Show,
   SkipNavContent,
   Text,
@@ -14,11 +13,11 @@ import {
 import { FC } from "react";
 import Lottie from "lottie-react";
 
-import notesLottie from "@utils/libs/lottie/notes.json";
+import AppLink from "@components/AppLink";
 import Footer from "@components/Footer";
 import CONFIG from "@utils/contants/config";
+import notesLottie from "@utils/libs/lottie/notes.json";
 
-import Link from "next/link";
 import LoginForm from "./LoginForm";
 
 const Login: FC = () => {
@@ -79,14 +78,9 @@ const Login: FC = () => {
           <CardBody textAlign="center">
             <Text>
               {"Don't have an account? "}
-              <ChakraLink
-                as={Link}
-                href="/register"
-                fontWeight="bold"
-                textColor="teal"
-              >
+              <AppLink href="/register" fontWeight="bold" textColor="teal">
                 Register
-              </ChakraLink>
+              </AppLink>
             </Text>
           </CardBody>
         </Card>

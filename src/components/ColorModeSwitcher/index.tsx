@@ -1,4 +1,4 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import {
   useColorMode,
   useColorModeValue,
@@ -8,9 +8,9 @@ import {
 import { RiMoonLine, RiSunFill } from "react-icons/ri";
 import Tooltip from "@components/Tooltip";
 
-export interface ColorModeSwitcherProps {
+export type ColorModeSwitcherProps = {
   styles?: ButtonProps;
-}
+};
 
 const ColorModeSwitcher: FC<ColorModeSwitcherProps> = ({ styles }) => {
   const { toggleColorMode } = useColorMode();

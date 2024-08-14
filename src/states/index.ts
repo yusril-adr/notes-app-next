@@ -1,7 +1,9 @@
-import { configureStore } from "@reduxjs/toolkit";
+import {
+  configureStore,
+  // createAsyncThunk
+} from "@reduxjs/toolkit";
 
-import alertMessageReducer from "./alertMessage";
-// import authUserReducer from './authUser';
+import authUserReducer from "./auth";
 // import isPreloadReducer from './isPreload';
 // import threadsReducer from './threads';
 // import threadDetailReducer from './threadDetail';
@@ -9,8 +11,7 @@ import alertMessageReducer from "./alertMessage";
 
 const store = configureStore({
   reducer: {
-    alertMessage: alertMessageReducer,
-    // authUser: authUserReducer,
+    authUser: authUserReducer,
     // isPreload: isPreloadReducer,
     // threads: threadsReducer,
     // threadDetail: threadDetailReducer,
@@ -22,5 +23,11 @@ const store = configureStore({
 export type RootState = ReturnType<typeof store.getState>;
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;
+
+// export const createAppAsyncThunk = createAsyncThunk.withTypes<{
+//   state: RootState;
+//   dispatch: AppDispatch;
+//   rejectValue: string | Error | unknown;
+// }>();
 
 export default store;

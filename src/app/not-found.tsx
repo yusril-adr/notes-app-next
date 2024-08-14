@@ -6,28 +6,31 @@ import Lottie from "lottie-react";
 
 import notFoundLottie from "@utils/libs/lottie/404.json";
 import CONFIG from "@utils/contants/config";
+import DefaultLayout from "./layout/Default";
 
 export default function NotFound(): ReactNode {
   return (
-    <Flex
-      flexDir="column"
-      justifyContent="center"
-      alignItems="center"
-      minH={CONFIG.MIN_BODY_HEIGHT}
-    >
-      <SkipNavContent />
+    <DefaultLayout>
+      <Flex
+        flexDir="column"
+        justifyContent="center"
+        alignItems="center"
+        minH={CONFIG.MIN_BODY_HEIGHT}
+      >
+        <SkipNavContent />
 
-      <Box
-        as={Lottie}
-        maxW={{
-          base: "100%",
-          md: "760px",
-          "2xl": "75%",
-        }}
-        animationData={notFoundLottie}
-        loop
-      />
-      <Heading>Page not found</Heading>
-    </Flex>
+        <Box
+          as={Lottie}
+          maxW={{
+            base: "100%",
+            md: "760px",
+            "2xl": "75%",
+          }}
+          animationData={notFoundLottie}
+          loop
+        />
+        <Heading>Page not found</Heading>
+      </Flex>
+    </DefaultLayout>
   );
 }

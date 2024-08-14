@@ -15,47 +15,94 @@ import {
   Stack,
   useColorModeValue,
 } from "@chakra-ui/react";
-import { useState, FC, Dispatch, SetStateAction } from "react";
+import { useState, FC, Dispatch, SetStateAction, useMemo } from "react";
 import {
   RiEyeFill,
   RiEyeLine,
   RiEyeOffFill,
   RiEyeOffLine,
 } from "react-icons/ri";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ErrorMessage } from "@hookform/error-message";
+import { useRouter } from "next/navigation";
 
 import LoginSchema from "./schema";
 import { z } from "zod";
-export interface LoginFormProps {
-  styles?: CardProps;
-}
+import { useAppDispatch, useAppSelector } from "@hooks/redux";
+import { login } from "@states/auth";
+import { StateStatus } from "@utils/contants/enums";
+import { AxiosError } from "axios";
+import AuthenticationError from "@errors/AuthenticationError";
+import { useLoadingBar } from "@hooks/loadingBar";
+import { useAlert } from "@hooks/alert";
 
-type FormData = z.infer<typeof LoginSchema>;
+export type LoginFormProps = {
+  styles?: CardProps;
+};
+
+type FormDataType = z.infer<typeof LoginSchema>;
 
 const LoginForm: FC<LoginFormProps> = ({ styles = {} }) => {
   const [showPass, setShowPass] = useState(false);
   const EyeIcon = useColorModeValue(RiEyeLine, RiEyeFill);
   const EyeOffIcon = useColorModeValue(RiEyeOffLine, RiEyeOffFill);
+  const dispatch = useAppDispatch();
+  const authUser = useAppSelector((state) => state.authUser);
+  const loadingBar = useLoadingBar();
+  const { showAlertMessage, showAlertError } = useAlert();
+  const router = useRouter();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
-    setError,
-  } = useForm<FormData>({
+    reset,
+    // setError,
+  } = useForm<FormDataType>({
     resolver: zodResolver(LoginSchema),
-    mode: "all",
+    mode: "onBlur",
   });
-  const onSubmit: SubmitHandler<FormData> = handleSubmit((data) =>
-    setError("password", { type: "manual", message: "invalid" })
-  );
+  const onSubmit = handleSubmit(async (data) => {
+    try {
+      loadingBar.start();
+      const resultAction = await dispatch(login(data));
+      loadingBar.complete();
+
+      if (login.fulfilled.match(resultAction)) {
+        showAlertMessage("Log In Success.");
+        reset();
+        router.push("/");
+      } else {
+        const payload = resultAction.payload;
+        if (payload instanceof AxiosError) {
+          let error = resultAction.payload;
+
+          if (payload.response?.status === 401) {
+            error = new AuthenticationError(
+              "Username/Email doesn't exist or your password is not match",
+            );
+          }
+
+          showAlertError(error);
+        } else {
+          throw resultAction.error;
+        }
+      }
+    } catch (error) {
+      showAlertError(error);
+    }
+  });
 
   const toggleShow = (
     val: boolean,
-    handler: Dispatch<SetStateAction<boolean>>
+    handler: Dispatch<SetStateAction<boolean>>,
   ): void => handler(!val);
+
+  const isLoading = useMemo(
+    () => authUser.status === StateStatus.PENDING,
+    [authUser],
+  );
 
   return (
     <Card {...styles}>
@@ -109,13 +156,7 @@ const LoginForm: FC<LoginFormProps> = ({ styles = {} }) => {
             />
           </FormControl>
 
-          <Button
-            type="submit"
-            colorScheme="teal"
-            mt="2"
-            // isLoading={isSubmitting || isLoading}
-            // disabled={isSubmitting || isLoading}
-          >
+          <Button type="submit" colorScheme="teal" mt="2" isLoading={isLoading}>
             Log in
           </Button>
         </Stack>

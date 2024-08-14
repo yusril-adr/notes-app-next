@@ -1,63 +1,106 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
+import { login, loginByToken, logout } from "./thunk";
+import { StateStatus } from "@utils/contants/enums";
+import { LoginByTokenType } from "@services/api/notesAPI/UserService";
 
-// import * as Api from '../../services/api/dicodingForum';
+export type StateType = {
+  value: LoginByTokenType | null;
+  status: StateStatus;
+  error: Error | null | unknown;
+};
 
-import { setAlertMessage, setErrorAlert } from "@states/alertMessage";
+export const initialState: StateType = {
+  value: null,
+  status: StateStatus.IDLE,
+  error: null,
+};
 
-// export const register = createAsyncThunk(
-//   "authUser/register",
-//   async ({ values, onSuccess }, { dispatch, rejectWithValue }) => {
-//     try {
-//       const response = await Api.register(values);
-//       dispatch(setAlertMessage("Pendaftaran Akun Berhasil."));
-//       formikProps.resetForm();
-//       formikProps.setSubmitting(false);
-//       return response;
-//     } catch (error) {
-//       dispatch(setErrorAlert(error));
-//       formikProps.setSubmitting(false);
-//       return rejectWithValue(error);
-//     }
-//   }
-// );
+export const authUserSlicer = createSlice({
+  name: "authUser",
+  initialState,
+  reducers: {
+    setAuthUser(state, action) {
+      return {
+        ...state,
+        value: action.payload,
+      };
+    },
+    unsetAuthUser() {
+      return initialState;
+    },
+  },
+  extraReducers: (builder) => {
+    // Register
+    // builder.addCase(register.pending, (state) => ({
+    //   ...state,
+    //   loading: "pending",
+    // }));
+    // builder.addCase(register.fulfilled, (state) => ({
+    //   ...state,
+    //   error: initialState.error,
+    //   loading: "succeeded",
+    // }));
+    // builder.addCase(register.rejected, (state, action) => ({
+    //   ...state,
+    //   loading: "failed",
+    //   error: action.payload,
+    // }));
 
-export const login = createAsyncThunk(
-  "authUser/login",
-  async ({ values, formikProps, navigate }, { dispatch, rejectWithValue }) => {
-    try {
-      await Api.login(values);
-      const response = await Api.getOwnProfile();
-      formikProps.setSubmitting(false);
-      navigate("/");
-      return response;
-    } catch (error) {
-      dispatch(setErrorAlert(error));
-      formikProps.setSubmitting(false);
-      return rejectWithValue(error);
-    }
-  }
-);
+    // Login
+    builder.addCase(login.pending, (state) => ({
+      ...state,
+      status: StateStatus.PENDING,
+    }));
+    builder.addCase(login.fulfilled, (state, action) => ({
+      ...state,
+      error: initialState.error,
+      status: StateStatus.SUCCESS,
+      value: action.payload,
+    }));
+    builder.addCase(login.rejected, (state, action) => {
+      return {
+        ...state,
+        status: StateStatus.REJECTED,
+        error: action.payload,
+      };
+    });
 
-// export const getOwnProfile = createAsyncThunk(
-//   "authUser/getOwnProfile",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await Api.getOwnProfile();
-//       return response;
-//     } catch (error) {
-//       return rejectWithValue(error);
-//     }
-//   }
-// );
+    // Login By Token
+    builder.addCase(loginByToken.pending, (state) => ({
+      ...state,
+      status: StateStatus.PENDING,
+    }));
+    builder.addCase(loginByToken.fulfilled, (state, action) => ({
+      ...state,
+      error: initialState.error,
+      status: StateStatus.SUCCESS,
+      value: action.payload,
+    }));
+    builder.addCase(loginByToken.rejected, (state, action) => {
+      return {
+        ...state,
+        status: StateStatus.REJECTED,
+        error: action.payload,
+      };
+    });
 
-// export const logout = createAsyncThunk(
-//   "authUser/logout",
-//   async (_, { rejectWithValue }) => {
-//     try {
-//       const response = await Api.logout();
-//       return response;
-//     } catch (error) {
-//       return rejectWithValue(error);
-//     }
-//   }
-// );
+    // Logout
+    builder.addCase(logout.pending, (state) => ({
+      ...state,
+      status: StateStatus.PENDING,
+    }));
+    builder.addCase(logout.fulfilled, () => ({
+      ...initialState,
+      status: StateStatus.SUCCESS,
+    }));
+    builder.addCase(logout.rejected, (state, action) => ({
+      ...state,
+      status: StateStatus.REJECTED,
+      error: action.payload,
+    }));
+  },
+});
+
+export const { setAuthUser, unsetAuthUser } = authUserSlicer.actions;
+
+export default authUserSlicer.reducer;

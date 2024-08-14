@@ -1,7 +1,6 @@
 "use client";
 
-import { useRef, FC } from "react";
-import { Link } from "@chakra-ui/next-js";
+import { useRef, FC, useMemo } from "react";
 import {
   useColorModeValue,
   useDisclosure,
@@ -37,20 +36,18 @@ import {
 } from "react-icons/ri";
 import { Else, If, Then } from "react-if";
 
-// Components
-import ColorModeSwitcher from "../ColorModeSwitcher";
-import Tooltip from "../Tooltip";
+import { useAppSelector } from "@hooks/redux";
 
-// Services
+import AppLink from "@components/AppLink";
+import ColorModeSwitcher from "@components/ColorModeSwitcher";
+import Tooltip from "@components/Tooltip";
+import { StateStatus } from "@utils/contants/enums";
+import useLogout from "@hooks/logout";
 
-type User = null | {
-  email?: string;
-};
-
-export interface AppBarProps {
+export type AppBarProps = {
   transparent?: boolean;
   styles: ContainerProps;
-}
+};
 
 const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
   const bgColor = useColorModeValue("white", "gray.800");
@@ -58,7 +55,17 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
   const drawerBtnRef = useRef<HTMLButtonElement>(null);
   const HomeIcon = useColorModeValue(RiHome4Line, RiHome4Fill);
   const NotesIcon = useColorModeValue(RiStickyNoteLine, RiStickyNoteFill);
-  const user: User = null;
+  const authUser = useAppSelector((state) => state.authUser);
+
+  const { logout } = useLogout();
+
+  const user = useMemo(() => {
+    if (authUser.status === StateStatus.SUCCESS) {
+      return authUser.value;
+    }
+
+    return null;
+  }, [authUser]);
 
   return (
     <Box
@@ -88,7 +95,7 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
         >
           <Tooltip label="Home">
             <IconButton
-              as={Link}
+              as={AppLink}
               href="/"
               size="md"
               fontSize="lg"
@@ -102,7 +109,7 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
 
           <Tooltip label="My Notes">
             <IconButton
-              as={Link}
+              as={AppLink}
               href="/notes"
               size="md"
               fontSize="lg"
@@ -123,18 +130,25 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
                   as={Button}
                   leftIcon={
                     <Avatar
-                      name={user?.email}
-                      src={`https://ui-avatars.com/api/?background=random&name=${user?.email}`}
+                      name={user?.username || user?.email}
+                      src={
+                        user?.profile_img ||
+                        `https://ui-avatars.com/api/?background=random&name=${user?.username || user?.email}`
+                      }
                       size="sm"
                     />
                   }
                   rightIcon={<RiArrowDownWideFill />}
                   variant="ghost"
                 >
-                  {user?.email}
+                  {user?.username || user?.email}
                 </MenuButton>
                 <MenuList>
-                  <MenuItem as={Link} href="/logout">
+                  <MenuItem
+                    as={Button}
+                    justifyContent="normal"
+                    onClick={logout}
+                  >
                     Log Out
                   </MenuItem>
                 </MenuList>
@@ -142,31 +156,31 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
             </Then>
 
             <Else>
-              <Link href={`/login`}>
-                <Button
-                  colorScheme="teal"
-                  variant="ghost"
-                  size={{
-                    base: "xs",
-                    md: "sm",
-                  }}
-                >
-                  Log In
-                </Button>
-              </Link>
+              <Button
+                as={AppLink}
+                href="/login"
+                colorScheme="teal"
+                variant="ghost"
+                size={{
+                  base: "xs",
+                  md: "sm",
+                }}
+              >
+                Log In
+              </Button>
 
-              <Link href={`/register`}>
-                <Button
-                  colorScheme="teal"
-                  variant="solid"
-                  size={{
-                    base: "xs",
-                    md: "sm",
-                  }}
-                >
-                  Register
-                </Button>
-              </Link>
+              <Button
+                as={AppLink}
+                href="/register"
+                colorScheme="teal"
+                variant="solid"
+                size={{
+                  base: "xs",
+                  md: "sm",
+                }}
+              >
+                Register
+              </Button>
             </Else>
           </If>
         </Box>
@@ -207,7 +221,7 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
               <Grid templateColumns="repeat(2, 1fr)" gap="2" onClick={onClose}>
                 <GridItem>
                   <Button
-                    as={Link}
+                    as={AppLink}
                     href="/"
                     variant="outline"
                     w="100%"
@@ -219,7 +233,7 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
 
                 <GridItem>
                   <Button
-                    as={Link}
+                    as={AppLink}
                     href="/notes"
                     variant="outline"
                     w="100%"
@@ -235,7 +249,12 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
               <If condition={!!user}>
                 <Then>
                   <Box w="100%" onClick={onClose}>
-                    <Button colorScheme="blue" variant="outline" w="100%">
+                    <Button
+                      colorScheme="blue"
+                      variant="outline"
+                      w="100%"
+                      onClick={logout}
+                    >
                       Log Out
                     </Button>
                   </Box>
@@ -249,7 +268,7 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
                   >
                     <GridItem>
                       <Button
-                        as={Link}
+                        as={AppLink}
                         href="/login"
                         colorScheme="teal"
                         variant="outline"
@@ -261,7 +280,7 @@ const AppBar: FC<AppBarProps> = ({ transparent, styles }) => {
 
                     <GridItem>
                       <Button
-                        as={Link}
+                        as={AppLink}
                         href="/register"
                         colorScheme="teal"
                         variant="solid"

@@ -5,12 +5,18 @@ import { Provider as ReduxProvider } from "react-redux";
 import { Provider as ChakraProvider } from "@utils/libs/chakra-ui/providers";
 
 import store from "@states";
+import LoadingBarProvider from "@utils/libs/reactTopLoadingBar/provider";
+import { AlertProvider } from "@components/Alert";
 
 const ProviderLayout: FC<{
   children: ReactNode;
 }> = ({ children }) => (
   <ReduxProvider store={store}>
-    <ChakraProvider>{children}</ChakraProvider>
+    <LoadingBarProvider>
+      <ChakraProvider>
+        <AlertProvider>{children}</AlertProvider>
+      </ChakraProvider>
+    </LoadingBarProvider>
   </ReduxProvider>
 );
 

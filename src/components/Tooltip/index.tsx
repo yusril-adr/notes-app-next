@@ -7,15 +7,15 @@ const ToolTipRef = forwardRef<HTMLDivElement, BoxProps>(
     <Box ref={ref} {...rest}>
       {children}
     </Box>
-  )
+  ),
 );
 
 ToolTipRef.displayName = "ToolTipRef";
 
-export interface TooltipProps {
+export type TooltipProps = {
   children: ReactNode[] | ReactNode;
   label: string;
-}
+};
 
 const Tooltip: FC<TooltipProps> = ({ children, label }) => {
   return (

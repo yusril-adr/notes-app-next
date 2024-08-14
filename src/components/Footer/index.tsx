@@ -1,10 +1,10 @@
-import { FC, ReactNode } from "react";
+import { FC } from "react";
 import PropTypes from "prop-types";
 import { Box, Text, type BoxProps } from "@chakra-ui/react";
 
-export interface FooterProps {
+export type FooterProps = {
   styles?: BoxProps;
-}
+};
 
 const Footer: FC<FooterProps> = ({ styles = {} }) => {
   const year = new Date().getFullYear();
