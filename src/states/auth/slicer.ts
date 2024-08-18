@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { login, loginByToken, logout } from "./thunk";
-import { StateStatus } from "@utils/contants/enums";
+import { StateStatus } from "@utils/constants/enums";
 import { LoginByTokenType } from "@services/api/notesAPI/UserService";
 
 export type StateType = {

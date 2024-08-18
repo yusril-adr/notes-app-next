@@ -5,7 +5,7 @@ import { Container, SkipNavLink } from "@chakra-ui/react";
 import AppBar from "@components/AppBar";
 import Footer from "@components/Footer";
 
-import CONFIG from "@utils/contants/config";
+import CONFIG from "@utils/constants/config";
 
 const DefaultLayout: FC<{
   children: ReactNode;

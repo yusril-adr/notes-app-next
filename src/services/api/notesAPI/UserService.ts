@@ -1,5 +1,5 @@
 import getAxiosInstance from "@utils/libs/axios";
-import CONFIG from "@utils/contants/config";
+import CONFIG from "@utils/constants/config";
 import TokenService from "@services/localstorage/TokenService";
 
 const { axiosInstance, axiosInstanceWithBearer } = getAxiosInstance({

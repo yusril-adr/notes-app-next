@@ -5,7 +5,7 @@ import { useAlert } from "@hooks/alert";
 import { useAppDispatch } from "@hooks/redux";
 import TokenService from "@services/localstorage/TokenService";
 import { loginByToken } from "@states/auth";
-import CONFIG from "@utils/contants/config";
+import CONFIG from "@utils/constants/config";
 import { AxiosError } from "axios";
 import { FC, ReactNode, useEffect } from "react";
 

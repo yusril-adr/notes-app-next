@@ -1,7 +1,7 @@
 "use client";
 
 import { useAppSelector } from "@hooks/redux";
-import { StateStatus } from "@utils/contants/enums";
+import { StateStatus } from "@utils/constants/enums";
 import { useRouter } from "next/navigation";
 import { FC, ReactNode } from "react";
 

@@ -13,7 +13,7 @@ import React, { FC, ReactNode, useMemo } from "react";
 import AppBar from "@components/AppBar";
 import Footer from "@components/Footer";
 
-import CONFIG from "@utils/contants/config";
+import CONFIG from "@utils/constants/config";
 
 const Layout: FC<{ children: ReactNode }> = ({ children }) => {
   const bgColor = useColorModeValue("teal.400", "teal.500");

@@ -31,7 +31,7 @@ import LoginSchema from "./schema";
 import { z } from "zod";
 import { useAppDispatch, useAppSelector } from "@hooks/redux";
 import { login } from "@states/auth";
-import { StateStatus } from "@utils/contants/enums";
+import { StateStatus } from "@utils/constants/enums";
 import { AxiosError } from "axios";
 import AuthenticationError from "@errors/AuthenticationError";
 import { useLoadingBar } from "@hooks/loadingBar";

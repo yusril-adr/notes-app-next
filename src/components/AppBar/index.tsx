@@ -41,7 +41,7 @@ import { useAppSelector } from "@hooks/redux";
 import AppLink from "@components/AppLink";
 import ColorModeSwitcher from "@components/ColorModeSwitcher";
 import Tooltip from "@components/Tooltip";
-import { StateStatus } from "@utils/contants/enums";
+import { StateStatus } from "@utils/constants/enums";
 import useLogout from "@hooks/logout";
 
 export type AppBarProps = {

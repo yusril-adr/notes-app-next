@@ -1,5 +1,5 @@
-import { useColorModeValue, useTheme, useToken } from "@chakra-ui/react";
-import { createContext, ReactNode, useContext, useRef } from "react";
+import { useColorModeValue } from "@chakra-ui/react";
+import { createContext, FC, ReactNode, useRef } from "react";
 import LoadingBar, { LoadingBarRef } from "react-top-loading-bar";
 
 // Define the context type
@@ -14,9 +14,7 @@ export const LoadingBarContext = createContext<
 >(undefined);
 
 // Provider component
-const LoadingBarProvider: React.FC<{ children: ReactNode }> = ({
-  children,
-}) => {
+const LoadingBarProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const loadingBarRef = useRef<LoadingBarRef>(null);
   const color = useColorModeValue("#38B2AC", "#319795");
 

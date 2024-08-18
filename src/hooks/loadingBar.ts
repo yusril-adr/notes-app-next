@@ -1,7 +1,7 @@
 import {
   LoadingBarContext,
   LoadingBarContextType,
-} from "@utils/libs/reactTopLoadingBar/provider";
+} from "@utils/libs/react-top-loading-bar/provider";
 import { useContext } from "react";
 
 export const useLoadingBar = (): LoadingBarContextType => {

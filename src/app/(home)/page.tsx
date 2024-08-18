@@ -10,7 +10,7 @@ import {
 } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import React from "react";
-import CONFIG from "@utils/contants/config";
+import CONFIG from "@utils/constants/config";
 
 export default function Home(): React.ReactNode {
   return (

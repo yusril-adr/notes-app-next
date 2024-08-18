@@ -20,7 +20,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useAlert } from "@hooks/alert";
-import CONFIG from "@utils/contants/config";
+import CONFIG from "@utils/constants/config";
 import APIError from "@errors/APIError";
 
 export type AlertContextType = {

@@ -15,7 +15,7 @@ import Lottie from "lottie-react";
 
 import AppLink from "@components/AppLink";
 import Footer from "@components/Footer";
-import CONFIG from "@utils/contants/config";
+import CONFIG from "@utils/constants/config";
 import notesLottie from "@utils/libs/lottie/notes.json";
 
 import LoginForm from "./LoginForm";
